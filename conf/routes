@@ -1,0 +1,29 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Different phases
+POST	/start/:sid										@controllers.StadiumController.start(sid)
+POST	/stop/:sid										@controllers.StadiumController.stop(sid)
+POST	/reset											@controllers.StadiumController.reset
+
+GET     /stadiums                   					@controllers.StadiumController.list
+GET     /stadiums/:sid              					@controllers.StadiumController.get(sid)
+POST	/stadiums										@controllers.StadiumController.add
+
+GET		/pricelists				 						@controllers.PriceListController.list
+GET		/pricelists/:pid								@controllers.PriceListController.get(pid)
+POST	/pricelists										@controllers.PriceListController.add
+
+POST	/stadiums/:sid/block							@controllers.BlockController.add(sid)
+POST	/stadiums/:sid/block/:bid/row/:row/seat/:seat	@controllers.BlockController.update(sid,bid,row : Int ,seat : Int)
+
+GET		/available/:sid									@controllers.StadiumController.available(sid)
+
+POST	/stadiums/:sid/tickets/:bid						@controllers.TicketController.buy(sid,bid)
+
+GET		/tickets/:sid									@controllers.TicketController.list(sid,index: Int ?= 0, page: Int ?= 100)
+GET		/tickets/count/:sid								@controllers.TicketController.count(sid)
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file               					controllers.Assets.at(path="/public", file)
