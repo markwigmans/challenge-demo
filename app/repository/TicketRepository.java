@@ -12,6 +12,11 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 
+/**
+ * 
+ * @author Mark Wigmans
+ * 
+ */
 public class TicketRepository {
 
     private final Multimap<String, Ticket> tickets = ArrayListMultimap.create();
@@ -22,12 +27,23 @@ public class TicketRepository {
         tickets.put(sid, ticket);
     }
 
+    public synchronized void add(String sid, List<Ticket> list) {
+        Assert.hasLength(sid, "stadium ID must have text");
+        Assert.notNull(list);
+        tickets.putAll(sid, list);
+    }
+
+    public int count() {
+        // TODO does it work that way?
+        return tickets.size();
+    }
+
     public int count(final String sid) {
         Assert.hasLength(sid, "stadium ID must have text");
         return tickets.get(sid).size();
     }
 
-    public List<Ticket> list(final String sid, final int index, final int size) {
+    public Collection<Ticket> list(final String sid, final int index, final int size) {
         Assert.hasLength(sid, "stadium ID must have text");
         final Collection<Ticket> collection = tickets.get(sid);
         return Lists.newArrayList(Iterables.partition(collection, size)).get(index);

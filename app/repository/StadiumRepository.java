@@ -1,6 +1,7 @@
 package repository;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -15,13 +16,18 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 
+/**
+ * 
+ * @author Mark Wigmans
+ * 
+ */
 public class StadiumRepository {
 
     private final Map<String, Stadium> stadiums = Maps.newHashMap();
     private final Map<String, Multimap<String, Seat>> seatsMap = Maps.newHashMap();
 
-    public List<Stadium> getAll() {
-        return Lists.newArrayList(stadiums.values());
+    public Collection<Stadium> getAll() {
+        return Collections.unmodifiableCollection(stadiums.values());
     }
 
     public Stadium get(final String sid) {

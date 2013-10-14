@@ -1,24 +1,33 @@
 package services;
 
-import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.List;
 
-import models.PriceCategory;
 import models.PriceList;
+import models.PriceList.PriceCategory;
 import models.Seat;
 import models.Ticket;
 
+import org.junit.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import play.Logger;
+import play.Logger.ALogger;
 import repository.PriceListRepository;
 import repository.TicketRepository;
 
 import com.google.common.collect.Lists;
 
+/**
+ * 
+ * @author Mark Wigmans
+ * 
+ */
 @Service
 public class TicketService {
+
+    private final ALogger logger = Logger.of(getClass());
 
     private final TicketRepository ticketRepository;
     private final PriceListRepository priceListRepository;
@@ -30,41 +39,39 @@ public class TicketService {
         this.priceListRepository = priceListRepository;
     }
 
+    public int count() {
+        return ticketRepository.count();
+    }
+
     public int count(final String sid) {
         return ticketRepository.count(sid);
     }
 
-    public List<Ticket> list(final String sid, final int index, final int size) {
+    public Collection<Ticket> list(final String sid, final int index, final int size) {
         return ticketRepository.list(sid, index, size);
     }
 
-    public List<Ticket> buy(final List<Seat> seats, final int kid, final int adult, final int senior) {
-        final List<Ticket> result = Lists.newArrayListWithExpectedSize(seats.size());
-        final List<Seat> kidSeats = seats.subList(0, kid);
-        final List<Seat> adultSeats = seats.subList(kid, kid + adult);
-        final List<Seat> seniorSeats = seats.subList(kid + adult, kid + adult + senior);
+    public List<Ticket> bought(final String sid, final String requestId, final List<Seat> seats, List<PriceCategory> categories) {
+        Assert.assertTrue(seats.size() == categories.size());
 
-        result.addAll(buy(kidSeats, PriceCategory.KID));
-        result.addAll(buy(adultSeats, PriceCategory.ADULT));
-        result.addAll(buy(seniorSeats, PriceCategory.SENIOR));
-        return result;
-    }
-
-    List<Ticket> buy(final List<Seat> seats, final PriceCategory category) {
-        Logger.debug("seats:" + seats);
         final List<Ticket> result = Lists.newArrayListWithExpectedSize(seats.size());
-        for (final Seat seat : seats) {
-            result.add(new Ticket(seat, getPrice(seat.priceList, category)));
+        for (int i = 0; i < seats.size(); i++) {
+            Seat seat = seats.get(i);
+            PriceCategory category = categories.get(i);
+            result.add(new Ticket(requestId, seat, category, getPrice(seat.priceList, category)));
         }
+
+        ticketRepository.add(sid, result);
+
         return result;
     }
 
-    BigDecimal getPrice(final String priceListId, final PriceCategory category) {
+    Integer getPrice(final String priceListId, final PriceCategory category) {
         final PriceList priceList = priceListRepository.get(priceListId);
         if (priceList != null) {
             return priceList.getPrice(category);
         }
-        Logger.error("Unknown pricelist ID: " + priceListId);
+        logger.error("Unknown pricelist ID: " + priceListId);
         return null;
     }
 }

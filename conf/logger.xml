@@ -18,7 +18,12 @@
   <logger name="play" level="INFO" />
   <logger name="application" level="DEBUG" />
 
-  <root level="DEBUG">
+  <logger name="controllers" level="DEBUG" />
+  <logger name="models" level="DEBUG" />
+  <logger name="repository" level="DEBUG" />
+  <logger name="services" level="DEBUG" />
+
+  <root level="WARN">
     <appender-ref ref="STDOUT" />
     <appender-ref ref="FILE" />
   </root>

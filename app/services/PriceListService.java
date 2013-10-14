@@ -1,6 +1,6 @@
 package services;
 
-import java.util.List;
+import java.util.Collection;
 
 import models.PriceList;
 
@@ -9,6 +9,11 @@ import org.springframework.stereotype.Service;
 
 import repository.PriceListRepository;
 
+/**
+ * 
+ * @author Mark Wigmans
+ * 
+ */
 @Service
 public class PriceListService {
 
@@ -24,7 +29,7 @@ public class PriceListService {
         repository.reset();
     }
 
-    public List<PriceList> getAll() {
+    public Collection<PriceList> getAll() {
         return repository.getAll();
     }
 

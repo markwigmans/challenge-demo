@@ -10,6 +10,7 @@ import models.Stadium;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import play.Logger;
+import play.Logger.ALogger;
 import play.libs.Json;
 import play.mvc.BodyParser;
 import play.mvc.Result;
@@ -18,8 +19,15 @@ import services.StadiumService;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
+/**
+ * 
+ * @author Mark Wigmans
+ * 
+ */
 @org.springframework.stereotype.Controller
 public class StadiumController {
+
+    private final ALogger logger = Logger.of(getClass());
 
     static final String JSON_KEY_STADIUM = "stadium";
 
@@ -35,7 +43,6 @@ public class StadiumController {
      * Start selling phase
      */
     public Result start(final String id) {
-        // TODO prepare for 'best seat algorithm'
         return ok();
     }
 
@@ -56,11 +63,11 @@ public class StadiumController {
 
     @BodyParser.Of(BodyParser.Json.class)
     public Result add() {
-        final JsonNode json = request().body().asJson();
-        final JsonNode stadiumPath = json.findPath(JSON_KEY_STADIUM);
-
-        Logger.info("stadium: " + stadiumPath);
-        final Stadium stadium = Json.fromJson(stadiumPath, Stadium.class);
+        final JsonNode body = request().body().asJson();
+        final JsonNode path = body.findValue(JSON_KEY_STADIUM);
+        final JsonNode stadiumNode = path != null ? path : body;
+        logger.debug("stadium: {}", stadiumNode);
+        final Stadium stadium = Json.fromJson(stadiumNode, Stadium.class);
         stadiumService.add(stadium);
         return ok(Json.toJson(stadium));
     }

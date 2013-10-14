@@ -1,55 +1,60 @@
 package models;
 
 import java.math.BigDecimal;
+import java.util.Collections;
+import java.util.Map;
+
+import models.utils.LogUtils;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.common.collect.Maps;
 
+/**
+ * 
+ * @author Mark Wigmans
+ * 
+ */
 public class PriceList {
+
+    public enum PriceCategory {
+        kids, adults, seniors
+    }
 
     /**
      * Unique identifying a pricelist
      */
     public final String id;
-    public final BigDecimal kid;
-    public final BigDecimal adult;
-    public final BigDecimal senior;
-
-    public PriceList(final String id, final long kid, final long adult, final long senior) {
-        this(id, BigDecimal.valueOf(kid), BigDecimal.valueOf(adult), BigDecimal.valueOf(senior));
-    }
-
-    public PriceList(final String id, final double kid, final double adult, final double senior) {
-        this(id, BigDecimal.valueOf(kid), BigDecimal.valueOf(adult), BigDecimal.valueOf(senior));
-    }
+    public final String name;
+    public final Map<PriceCategory, Integer> pricecategories;
 
     @JsonCreator
-    public PriceList(@JsonProperty("id") final String id, @JsonProperty("kid") final BigDecimal kid,
-            @JsonProperty("adult") final BigDecimal adult, @JsonProperty("senior") final BigDecimal senior) {
+    public PriceList(@JsonProperty(value = "id", required = true) final String id, @JsonProperty("name") final String name,
+            @JsonProperty("pricecategories") final Map<PriceCategory, Integer> priceCategories) {
         super();
         this.id = id;
-        this.kid = kid;
-        this.adult = adult;
-        this.senior = senior;
+        this.name = name;
+        this.pricecategories = Collections.unmodifiableMap(priceCategories);
+    }
+
+    public PriceList(String id, double kids, double adults, double seniors) {
+        this.id = id;
+        this.name = id;
+        final Map<PriceCategory, Integer> map = Maps.newHashMap();
+        map.put(PriceCategory.kids, new BigDecimal(kids * 100).intValue());
+        map.put(PriceCategory.adults, new BigDecimal(adults * 100).intValue());
+        map.put(PriceCategory.seniors, new BigDecimal(seniors * 100).intValue());
+        this.pricecategories = Collections.unmodifiableMap(map);
     }
 
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this);
+        return ToStringBuilder.reflectionToString(this, LogUtils.STANDARD_STYLE);
     }
 
-    public BigDecimal getPrice(final PriceCategory category) {
-        switch (category) {
-        case KID:
-            return kid;
-        case ADULT:
-            return adult;
-        case SENIOR:
-            return senior;
-        default:
-            return null;
-        }
+    public Integer getPrice(final PriceCategory category) {
+        return pricecategories.get(category);
     }
 }

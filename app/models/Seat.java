@@ -1,10 +1,17 @@
 package models;
 
+import models.utils.LogUtils;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * 
+ * @author Mark Wigmans
+ * 
+ */
 public class Seat {
 
     public final int row;
@@ -12,8 +19,8 @@ public class Seat {
     public final String priceList;
 
     @JsonCreator
-    public Seat(@JsonProperty("row") final int row, @JsonProperty("seat") final int seat,
-            @JsonProperty("priceList") final String priceList) {
+    public Seat(@JsonProperty(value = "row", required = true) final int row,
+            @JsonProperty(value = "seat", required = true) final int seat, @JsonProperty("priceList") final String priceList) {
         super();
         this.row = row;
         this.seat = seat;
@@ -22,6 +29,6 @@ public class Seat {
 
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this);
+        return ToStringBuilder.reflectionToString(this, LogUtils.STANDARD_STYLE);
     }
 }

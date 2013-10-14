@@ -1,5 +1,6 @@
 package services;
 
+import java.util.Collection;
 import java.util.List;
 
 import models.Stadium;
@@ -10,6 +11,11 @@ import org.springframework.stereotype.Service;
 import repository.StadiumRepository;
 import repository.StadiumRepository.BlockCount;
 
+/**
+ * 
+ * @author Mark Wigmans
+ * 
+ */
 @Service
 public class StadiumService {
 
@@ -25,7 +31,7 @@ public class StadiumService {
         repository.reset();
     }
 
-    public List<Stadium> getAll() {
+    public Collection<Stadium> getAll() {
         return repository.getAll();
     }
 

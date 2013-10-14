@@ -38,7 +38,7 @@ public class Global extends GlobalSettings {
 
     @Override
     public Promise<SimpleResult> onError(final RequestHeader header, final Throwable t) {
-        Logger.error("on Error", t);
+        Logger.error("An error", t);
         return super.onError(header, t);
     }
 
@@ -47,5 +47,4 @@ public class Global extends GlobalSettings {
         Logger.error("Handler not found: " + header);
         return super.onHandlerNotFound(header);
     }
-
 }

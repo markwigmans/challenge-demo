@@ -43,7 +43,7 @@ public class StadiumControllerTest {
             @Override
             public void run() {
                 try {
-                    assertThat(repository.count() == 0);
+                    assertThat(repository.count()).isEqualTo(0);
 
                     final ObjectMapper mapper = new ObjectMapper();
                     final JsonNode json = mapper.readTree("{ \"stadium\" : {\"id\" : \"uuid\", \"name\" : \"ArenA\"}}");
@@ -51,7 +51,7 @@ public class StadiumControllerTest {
                     final Result result = callAction(controllers.routes.ref.StadiumController.add(), fakeRequest);
 
                     assertThat(status(result)).isEqualTo(Status.OK);
-                    assertThat(repository.count() == 1);
+                    assertThat(repository.count()).isEqualTo(1);
                 } catch (final Exception e) {
                     e.printStackTrace();
                     fail(e.toString());

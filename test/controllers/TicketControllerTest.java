@@ -7,8 +7,13 @@ import static play.test.Helpers.fakeApplication;
 import static play.test.Helpers.fakeRequest;
 import static play.test.Helpers.running;
 import static play.test.Helpers.status;
+
+import java.util.List;
+import java.util.UUID;
+
 import models.Block;
 import models.PriceList;
+import models.PriceList.PriceCategory;
 import models.Stadium;
 
 import org.junit.Test;
@@ -17,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import play.libs.Json;
 import play.mvc.Http.Status;
 import play.mvc.Result;
 import play.test.FakeRequest;
@@ -27,6 +33,7 @@ import services.TicketService;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.google.common.collect.Lists;
 
 import configs.AppConfig;
 
@@ -59,26 +66,25 @@ public class TicketControllerTest {
                     priceListService.add(new PriceList(pid, 1.1, 2.1, 1.3));
                     blockService.add(sid, new Block(bid, bid, rows, seats, pid));
 
-                    assertThat(blockService.available(sid, bid) == rows * seats);
-                    assertThat(ticketService.count(sid) == 0);
-
-                    final int kidTickets = 3;
-                    final int adultTickets = 2;
-                    final int seniorickets = 1;
+                    assertThat(blockService.available(sid, bid)).isEqualTo(rows * seats);
+                    assertThat(ticketService.count(sid)).isEqualTo(0);
 
                     final ObjectMapper mapper = new ObjectMapper();
                     final ObjectNode json = mapper.createObjectNode();
-                    json.put(TicketController.JSON_KEY_KID, kidTickets);
-                    json.put(TicketController.JSON_KEY_ADULT, adultTickets);
-                    json.put(TicketController.JSON_KEY_SENIOR, seniorickets);
+
+                    List<PriceCategory> ticketRequest = Lists.newArrayList(PriceCategory.kids, PriceCategory.kids,
+                            PriceCategory.adults, PriceCategory.seniors);
+
+                    json.put(TicketController.JSON_KEY_REQUEST_ID, UUID.randomUUID().toString());
+                    json.put(TicketController.JSON_KEY_TICKET_REQUEST, Json.toJson(ticketRequest));
 
                     final FakeRequest fakeRequest = fakeRequest().withJsonBody(json);
                     final Result result = callAction(controllers.routes.ref.TicketController.buy(sid, bid), fakeRequest);
 
-                    final int ticketsNeeded = kidTickets + adultTickets + seniorickets;
+                    final int ticketsNeeded = ticketRequest.size();
                     assertThat(status(result)).isEqualTo(Status.OK);
-                    assertThat(blockService.available(sid, bid) == rows * seats - ticketsNeeded);
-                    assertThat(ticketService.count(sid) == ticketsNeeded);
+                    assertThat(blockService.available(sid, bid)).isEqualTo(rows * seats - ticketsNeeded);
+                    assertThat(ticketService.count(sid)).isEqualTo(ticketsNeeded);
                 } catch (final Exception e) {
                     e.printStackTrace();
                     fail(e.toString());

@@ -1,19 +1,24 @@
 package repository;
 
-import java.util.List;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.concurrent.ConcurrentMap;
 
 import models.PriceList;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
+/**
+ * 
+ * @author Mark Wigmans
+ * 
+ */
 public class PriceListRepository {
 
     private final ConcurrentMap<String, PriceList> priceLists = Maps.newConcurrentMap();
 
-    public List<PriceList> getAll() {
-        return Lists.newArrayList(priceLists.values());
+    public Collection<PriceList> getAll() {
+        return Collections.unmodifiableCollection(priceLists.values());
     }
 
     public PriceList get(final String id) {

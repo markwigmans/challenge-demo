@@ -1,22 +1,32 @@
 package models;
 
-import java.math.BigDecimal;
+import models.PriceList.PriceCategory;
+import models.utils.LogUtils;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+/**
+ * 
+ * @author Mark Wigmans
+ * 
+ */
 public class Ticket {
 
+    public final String requestId;
     public final Seat seat;
-    public final BigDecimal price;
+    public final PriceCategory category;
+    public final Integer price;
 
-    public Ticket(final Seat seat, final BigDecimal price) {
+    public Ticket(final String requestId, final Seat seat, final PriceCategory category, final Integer price) {
         super();
+        this.requestId = requestId;
         this.seat = seat;
+        this.category = category;
         this.price = price;
     }
 
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this);
+        return ToStringBuilder.reflectionToString(this, LogUtils.STANDARD_STYLE);
     }
 }

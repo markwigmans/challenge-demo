@@ -7,6 +7,7 @@ import models.PriceList;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import play.Logger;
+import play.Logger.ALogger;
 import play.libs.Json;
 import play.mvc.BodyParser;
 import play.mvc.Result;
@@ -14,8 +15,15 @@ import services.PriceListService;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
+/**
+ * 
+ * @author Mark Wigmans
+ * 
+ */
 @org.springframework.stereotype.Controller
 public class PriceListController {
+
+    private final ALogger logger = Logger.of(getClass());
 
     static final String JSON_KEY_PRICELIST = "pricelist";
 
@@ -29,10 +37,11 @@ public class PriceListController {
 
     @BodyParser.Of(BodyParser.Json.class)
     public Result add() {
-        final JsonNode json = request().body().asJson();
-        final JsonNode path = json.findPath(JSON_KEY_PRICELIST);
-        Logger.debug("priceList: " + path);
-        final PriceList priceList = Json.fromJson(path, PriceList.class);
+        final JsonNode body = request().body().asJson();
+        final JsonNode path = body.findValue(JSON_KEY_PRICELIST);
+        final JsonNode priceListNode = path != null ? path : body;
+        logger.debug("priceList: {}", priceListNode);
+        final PriceList priceList = Json.fromJson(priceListNode, PriceList.class);
         service.add(priceList);
         return ok(Json.toJson(priceList));
     }

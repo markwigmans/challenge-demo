@@ -61,7 +61,7 @@ public class BlockControllerTest {
                     priceListService.add(new PriceList(pid, 1, 2, 3));
                     blockService.add(sid, new Block(bid, bid, 10, 20, pid));
 
-                    assertThat(blockService.available(sid, bid) == 200);
+                    assertThat(blockService.available(sid, bid)).isEqualTo(200);
 
                     final ObjectMapper mapper = new ObjectMapper();
                     final ObjectNode json = mapper.createObjectNode();
@@ -71,7 +71,7 @@ public class BlockControllerTest {
                     final Result result = callAction(controllers.routes.ref.BlockController.update(sid, bid, 3, 4), fakeRequest);
 
                     assertThat(status(result)).isEqualTo(Status.OK);
-                    assertThat(blockService.available(sid, bid) == 199);
+                    assertThat(blockService.available(sid, bid)).isEqualTo(199);
                 } catch (final Exception e) {
                     e.printStackTrace();
                     fail(e.toString());
@@ -96,7 +96,7 @@ public class BlockControllerTest {
                     priceListService.add(new PriceList(pid2, 4, 5, 6));
                     blockService.add(sid, new Block(bid, bid, 10, 20, pid1));
 
-                    assertThat(blockService.available(sid, bid) == 200);
+                    assertThat(blockService.available(sid, bid)).isEqualTo(200);
 
                     final ObjectMapper mapper = new ObjectMapper();
                     final ObjectNode json = mapper.createObjectNode();
@@ -106,7 +106,7 @@ public class BlockControllerTest {
                     final Result result = callAction(controllers.routes.ref.BlockController.update(sid, bid, 3, 4), fakeRequest);
 
                     assertThat(status(result)).isEqualTo(Status.OK);
-                    assertThat(blockService.available(sid, bid) == 200);
+                    assertThat(blockService.available(sid, bid)).isEqualTo(200);
                 } catch (final Exception e) {
                     e.printStackTrace();
                     fail(e.toString());

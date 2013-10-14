@@ -8,6 +8,7 @@ import models.Seat;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import play.Logger;
+import play.Logger.ALogger;
 import play.libs.Json;
 import play.mvc.BodyParser;
 import play.mvc.Result;
@@ -15,8 +16,16 @@ import services.BlockService;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
+/**
+ * 
+ * @author Mark Wigmans
+ * 
+ */
 @org.springframework.stereotype.Controller
 public class BlockController {
+
+    @SuppressWarnings("unused")
+    private final ALogger logger = Logger.of(getClass());
 
     static final String JSON_KEY_BLOCK = "block";
     static final String JSON_KEY_PRICELIST = "pricelist";
@@ -32,10 +41,10 @@ public class BlockController {
 
     @BodyParser.Of(BodyParser.Json.class)
     public Result add(final String sid) {
-        final JsonNode json = request().body().asJson();
-        final JsonNode node = json.findPath(JSON_KEY_BLOCK);
-        Logger.debug("block: " + node);
-        final Block block = Json.fromJson(node, Block.class);
+        final JsonNode body = request().body().asJson();
+        final JsonNode path = body.findValue(JSON_KEY_BLOCK);
+        final JsonNode blockNode = path != null ? path : body;
+        final Block block = Json.fromJson(blockNode, Block.class);
         service.add(sid, block);
         return ok(Json.toJson(block));
     }
