@@ -9,6 +9,12 @@ import play.mvc.Http.RequestHeader;
 import play.mvc.SimpleResult;
 import configs.AppConfig;
 
+/**
+ * Standard play2 global settings.
+ * 
+ * @author Mark Wigmans
+ * 
+ */
 public class Global extends GlobalSettings {
 
     private ApplicationContext ctx;

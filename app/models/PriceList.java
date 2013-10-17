@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.collect.Maps;
 
 /**
+ * Price lists global for all stadiums.
  * 
  * @author Mark Wigmans
  * 

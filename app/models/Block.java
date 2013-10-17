@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
+ * Models a block in a given stadium.
  * 
  * @author Mark Wigmans
  * 

@@ -13,12 +13,16 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 
 /**
+ * Ticket storage.
  * 
  * @author Mark Wigmans
  * 
  */
 public class TicketRepository {
 
+    /**
+     * store all the tickets per given stadium.
+     */
     private final Multimap<String, Ticket> tickets = ArrayListMultimap.create();
 
     public synchronized void add(final String sid, final Ticket ticket) {

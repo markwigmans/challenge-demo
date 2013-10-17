@@ -8,6 +8,12 @@ import repository.PriceListRepository;
 import repository.StadiumRepository;
 import repository.TicketRepository;
 
+/**
+ * Play2 application configuration hook.
+ * 
+ * @author Mark Wigmans
+ * 
+ */
 @Configuration
 @ComponentScan({ "controllers", "services", "repository" })
 public class AppConfig {

@@ -17,6 +17,7 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 
 /**
+ * Storage of stadiums.
  * 
  * @author Mark Wigmans
  * 

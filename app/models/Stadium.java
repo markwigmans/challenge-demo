@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
+ * Models a stadium.
  * 
  * @author Mark Wigmans
  * 

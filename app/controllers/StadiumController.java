@@ -20,6 +20,7 @@ import services.StadiumService;
 import com.fasterxml.jackson.databind.JsonNode;
 
 /**
+ * Calls to create a stadium in phase related calls (start/stop/reset).
  * 
  * @author Mark Wigmans
  * 

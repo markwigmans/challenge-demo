@@ -17,6 +17,7 @@ import services.BlockService;
 import com.fasterxml.jackson.databind.JsonNode;
 
 /**
+ * Processes all block related API calls.
  * 
  * @author Mark Wigmans
  * 

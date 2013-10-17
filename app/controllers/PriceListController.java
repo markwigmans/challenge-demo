@@ -16,6 +16,7 @@ import services.PriceListService;
 import com.fasterxml.jackson.databind.JsonNode;
 
 /**
+ * Price list related API calls.
  * 
  * @author Mark Wigmans
  * 

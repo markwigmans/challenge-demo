@@ -20,7 +20,7 @@ POST	/stadiums/:sid/block/:bid/row/:row/seat/:seat	@controllers.BlockController.
 
 GET		/available/:sid									@controllers.StadiumController.available(sid)
 
-POST	/stadiums/:sid/tickets/:bid						@controllers.TicketController.buy(sid,bid)
+POST	/tickets/buy/:sid/:bid							@controllers.TicketController.buy(sid,bid)
 
 GET		/tickets/:sid									@controllers.TicketController.list(sid,index: Int ?= 0, page: Int ?= 100)
 GET		/tickets/count									@controllers.TicketController.countAll()

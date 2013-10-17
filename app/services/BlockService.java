@@ -57,7 +57,7 @@ public class BlockService {
         if (seats != null) {
             return ticketService.bought(sid, requestId, seats, categories);
         } else {
-            // buying the given number of tickets was not successful, so return empty list
+            // buying the given number of tickets was not successful, so return an empty list
             return Collections.emptyList();
         }
     }

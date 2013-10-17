@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
+ * A seat within a block.
  * 
  * @author Mark Wigmans
  * 

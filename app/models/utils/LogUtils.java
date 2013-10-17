@@ -4,6 +4,7 @@ import org.apache.commons.lang3.builder.StandardToStringStyle;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**
+ * Logging Utility class.
  * 
  * @author Mark Wigmans
  * 

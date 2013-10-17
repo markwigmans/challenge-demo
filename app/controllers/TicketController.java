@@ -25,6 +25,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.Lists;
 
 /**
+ * All ticket related API calls.
  * 
  * @author Mark Wigmans
  * 

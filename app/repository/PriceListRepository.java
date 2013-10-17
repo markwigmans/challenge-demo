@@ -9,6 +9,7 @@ import models.PriceList;
 import com.google.common.collect.Maps;
 
 /**
+ * Storage of price lists.
  * 
  * @author Mark Wigmans
  * 

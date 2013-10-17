@@ -6,6 +6,7 @@ import models.utils.LogUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**
+ * The result of buying an seat for a given stadium.
  * 
  * @author Mark Wigmans
  * 

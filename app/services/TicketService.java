@@ -51,6 +51,9 @@ public class TicketService {
         return ticketRepository.list(sid, index, size);
     }
 
+    /**
+     * Process the bought seats and return tickets for it.
+     */
     public List<Ticket> bought(final String sid, final String requestId, final List<Seat> seats,
             final List<PriceCategory> categories) {
         Assert.isTrue(seats.size() == categories.size());
@@ -72,7 +75,7 @@ public class TicketService {
         if (priceList != null) {
             return priceList.getPrice(category);
         }
-        logger.error("Unknown pricelist ID: " + priceListId);
+        logger.error("Unknown pricelist ID: {}", priceListId);
         return null;
     }
 }
