@@ -1,6 +1,5 @@
 package models;
 
-import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.Map;
 
@@ -39,13 +38,16 @@ public class PriceList {
         this.pricecategories = Collections.unmodifiableMap(priceCategories);
     }
 
-    public PriceList(String id, double kids, double adults, double seniors) {
+    /**
+     * Helper constructor for testing purposes.
+     */
+    public PriceList(final String id, final double kids, final double adults, final double seniors) {
         this.id = id;
         this.name = id;
         final Map<PriceCategory, Integer> map = Maps.newHashMap();
-        map.put(PriceCategory.kids, new BigDecimal(kids * 100).intValue());
-        map.put(PriceCategory.adults, new BigDecimal(adults * 100).intValue());
-        map.put(PriceCategory.seniors, new BigDecimal(seniors * 100).intValue());
+        map.put(PriceCategory.kids, Double.valueOf(kids * 100.0).intValue());
+        map.put(PriceCategory.adults, Double.valueOf(adults * 100.0).intValue());
+        map.put(PriceCategory.seniors, Double.valueOf(seniors * 100.0).intValue());
         this.pricecategories = Collections.unmodifiableMap(map);
     }
 

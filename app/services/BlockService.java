@@ -51,7 +51,7 @@ public class BlockService {
         return stadiumRepository.available(sid, bid);
     }
 
-    public List<Ticket> buy(final String sid, final String bid, final String requestId, List<PriceCategory> categories) {
+    public List<Ticket> buy(final String sid, final String bid, final String requestId, final List<PriceCategory> categories) {
         final int needed = categories.size();
         final List<Seat> seats = stadiumRepository.buy(sid, bid, needed);
         if (seats != null) {

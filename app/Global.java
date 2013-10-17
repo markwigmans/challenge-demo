@@ -20,7 +20,7 @@ public class Global extends GlobalSettings {
     }
 
     @Override
-    public void onStop(Application app) {
+    public void onStop(final Application app) {
         Logger.info("Application shutdown...");
         super.onStop(app);
     }

@@ -56,7 +56,7 @@ public class TicketController {
         final JsonNode requestNode = body.findValue(JSON_KEY_TICKET_REQUEST);
 
         final List<PriceCategory> request = Lists.newArrayList();
-        for (JsonNode categoryNode : requestNode) {
+        for (final JsonNode categoryNode : requestNode) {
             request.add(PriceCategory.valueOf(categoryNode.asText()));
         }
 

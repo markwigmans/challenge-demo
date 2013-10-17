@@ -27,7 +27,7 @@ public class TicketRepository {
         tickets.put(sid, ticket);
     }
 
-    public synchronized void add(String sid, List<Ticket> list) {
+    public synchronized void add(final String sid, final List<Ticket> list) {
         Assert.hasLength(sid, "stadium ID must have text");
         Assert.notNull(list);
         tickets.putAll(sid, list);

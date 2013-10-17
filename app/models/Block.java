@@ -51,7 +51,7 @@ public class Block {
         return availability;
     }
 
-    public void setAvailability(int availability) {
+    public void setAvailability(final int availability) {
         this.availability = availability;
     }
 }

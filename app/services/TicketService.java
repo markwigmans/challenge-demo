@@ -51,13 +51,14 @@ public class TicketService {
         return ticketRepository.list(sid, index, size);
     }
 
-    public List<Ticket> bought(final String sid, final String requestId, final List<Seat> seats, List<PriceCategory> categories) {
+    public List<Ticket> bought(final String sid, final String requestId, final List<Seat> seats,
+            final List<PriceCategory> categories) {
         Assert.assertTrue(seats.size() == categories.size());
 
         final List<Ticket> result = Lists.newArrayListWithExpectedSize(seats.size());
         for (int i = 0; i < seats.size(); i++) {
-            Seat seat = seats.get(i);
-            PriceCategory category = categories.get(i);
+            final Seat seat = seats.get(i);
+            final PriceCategory category = categories.get(i);
             result.add(new Ticket(requestId, seat, category, getPrice(seat.priceList, category)));
         }
 
