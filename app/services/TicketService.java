@@ -8,9 +8,9 @@ import models.PriceList.PriceCategory;
 import models.Seat;
 import models.Ticket;
 
-import org.junit.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import play.Logger;
 import play.Logger.ALogger;
@@ -53,7 +53,7 @@ public class TicketService {
 
     public List<Ticket> bought(final String sid, final String requestId, final List<Seat> seats,
             final List<PriceCategory> categories) {
-        Assert.assertTrue(seats.size() == categories.size());
+        Assert.isTrue(seats.size() == categories.size());
 
         final List<Ticket> result = Lists.newArrayListWithExpectedSize(seats.size());
         for (int i = 0; i < seats.size(); i++) {

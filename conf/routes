@@ -23,7 +23,7 @@ GET		/available/:sid									@controllers.StadiumController.available(sid)
 POST	/stadiums/:sid/tickets/:bid						@controllers.TicketController.buy(sid,bid)
 
 GET		/tickets/:sid									@controllers.TicketController.list(sid,index: Int ?= 0, page: Int ?= 100)
-GET		/tickets/count									@controllers.TicketController.count()
+GET		/tickets/count									@controllers.TicketController.countAll()
 GET		/tickets/count/:sid								@controllers.TicketController.count(sid)
 
 # Map static resources from the /public folder to the /assets URL path

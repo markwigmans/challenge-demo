@@ -65,7 +65,7 @@ public class TicketController {
         return ok(Json.toJson(tickets));
     }
 
-    public Result count() {
+    public Result countAll() {
         final int count = ticketService.count();
 
         final ObjectMapper mapper = new ObjectMapper();
