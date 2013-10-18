@@ -29,6 +29,11 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import configs.AppConfig;
 
+/**
+ * Test of class {@link PriceListController} class.
+ * 
+ * @author Mark Wigmans
+ */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { AppConfig.class })
 public class PriceListControllerTest {
@@ -113,7 +118,7 @@ public class PriceListControllerTest {
             public void run() {
                 try {
                     // add data
-                    PriceList priceList1 = new PriceList("p3", 3.1, 3.3, 3.2);
+                    final PriceList priceList1 = new PriceList("p3", 3.1, 3.3, 3.2);
                     callAction(controllers.routes.ref.PriceListController.add(), fakeRequest()
                             .withJsonBody(Json.toJson(priceList1)));
 

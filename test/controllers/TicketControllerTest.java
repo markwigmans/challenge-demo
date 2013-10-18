@@ -37,6 +37,11 @@ import com.google.common.collect.Lists;
 
 import configs.AppConfig;
 
+/**
+ * Test of class {@link TicketController} class.
+ * 
+ * @author Mark Wigmans
+ */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { AppConfig.class })
 public class TicketControllerTest {
@@ -72,7 +77,7 @@ public class TicketControllerTest {
                     final ObjectMapper mapper = new ObjectMapper();
                     final ObjectNode json = mapper.createObjectNode();
 
-                    List<PriceCategory> ticketRequest = Lists.newArrayList(PriceCategory.kids, PriceCategory.kids,
+                    final List<PriceCategory> ticketRequest = Lists.newArrayList(PriceCategory.kids, PriceCategory.kids,
                             PriceCategory.adults, PriceCategory.seniors);
 
                     json.put(TicketController.JSON_KEY_REQUEST_ID, UUID.randomUUID().toString());

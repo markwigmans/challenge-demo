@@ -30,6 +30,11 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import configs.AppConfig;
 
+/**
+ * Test of class {@link BlockController} class.
+ * 
+ * @author Mark Wigmans
+ */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { AppConfig.class })
 public class BlockControllerTest {

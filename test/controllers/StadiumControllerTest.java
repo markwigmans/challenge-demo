@@ -25,6 +25,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import configs.AppConfig;
 
+/**
+ * Test of class {@link StadiumController} class.
+ * 
+ * @author Mark Wigmans
+ */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { AppConfig.class })
 public class StadiumControllerTest {
