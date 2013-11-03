@@ -66,7 +66,7 @@ public class StadiumRepository {
         final List<Seat> seatList = Lists.newArrayListWithExpectedSize(block.rows * block.seats);
         for (int row = 1; row <= block.rows; row++) {
             for (int seat = 1; seat <= block.seats; seat++) {
-                seatList.add(new Seat(row, seat, block.defaultPrice));
+                seatList.add(new Seat(row, seat, true, block.defaultPrice));
             }
         }
         seatsMap.get(sid).putAll(block.id, seatList);

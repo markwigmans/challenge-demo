@@ -2,6 +2,7 @@ package models;
 
 import models.utils.LogUtils;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -17,15 +18,19 @@ public class Seat {
 
     public final int row;
     public final int seat;
+    public final boolean available;
     public final String priceList;
 
     @JsonCreator
     public Seat(@JsonProperty(value = "row", required = true) final int row,
-            @JsonProperty(value = "seat", required = true) final int seat, @JsonProperty("priceList") final String priceList) {
+            @JsonProperty(value = "seat", required = true) final int seat,
+            @JsonProperty(value = "available", required = true) final boolean available,
+            @JsonProperty("priceList") final String priceList) {
         super();
         this.row = row;
         this.seat = seat;
-        this.priceList = priceList;
+        this.available = available;
+        this.priceList = StringUtils.defaultString(priceList);
     }
 
     @Override

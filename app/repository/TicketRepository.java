@@ -38,13 +38,16 @@ public class TicketRepository {
     }
 
     public int count() {
-        // TODO does it work that way?
         return tickets.size();
     }
 
     public int count(final String sid) {
         Assert.hasLength(sid, "stadium ID must have text");
         return tickets.get(sid).size();
+    }
+
+    public synchronized void reset() {
+        tickets.clear();
     }
 
     public Collection<Ticket> list(final String sid, final int index, final int size) {

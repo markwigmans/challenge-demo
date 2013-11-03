@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import repository.StadiumRepository;
 import repository.StadiumRepository.BlockCount;
+import repository.TicketRepository;
 
 /**
  * 
@@ -19,31 +20,34 @@ import repository.StadiumRepository.BlockCount;
 @Service
 public class StadiumService {
 
-    private final StadiumRepository repository;
+    private final StadiumRepository stadiumRepository;
+    private final TicketRepository ticketRepository;
 
     @Autowired
-    public StadiumService(final StadiumRepository repository) {
+    public StadiumService(final StadiumRepository repository, TicketRepository ticketRepository) {
         super();
-        this.repository = repository;
+        this.stadiumRepository = repository;
+        this.ticketRepository = ticketRepository;
     }
 
     public void reset() {
-        repository.reset();
+        stadiumRepository.reset();
+        ticketRepository.reset();
     }
 
     public Collection<Stadium> getAll() {
-        return repository.getAll();
+        return stadiumRepository.getAll();
     }
 
     public Stadium get(final String id) {
-        return repository.get(id);
+        return stadiumRepository.get(id);
     }
 
     public void add(final Stadium stadium) {
-        repository.add(stadium);
+        stadiumRepository.add(stadium);
     }
 
     public List<BlockCount> available(final String id) {
-        return repository.available(id);
+        return stadiumRepository.available(id);
     }
 }

@@ -17,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import play.Logger;
+import play.Logger.ALogger;
 import play.libs.Json;
 import play.mvc.Http.Status;
 import play.mvc.Result;
@@ -24,8 +26,7 @@ import play.test.FakeRequest;
 import repository.PriceListRepository;
 import services.PriceListService;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.databind.JsonNode;
 
 import configs.AppConfig;
 
@@ -37,6 +38,8 @@ import configs.AppConfig;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { AppConfig.class })
 public class PriceListControllerTest {
+
+    private final ALogger logger = Logger.of(getClass());
 
     @Autowired
     private PriceListService service;
@@ -56,9 +59,8 @@ public class PriceListControllerTest {
                 try {
                     assertThat(repository.count()).isEqualTo(0);
 
-                    final ObjectMapper mapper = new ObjectMapper();
-                    final ObjectNode json = mapper.createObjectNode();
-                    json.put(PriceListController.JSON_KEY_PRICELIST, Json.toJson(new PriceList("pl", 1.1, 1.3, 1.2)));
+                    final JsonNode json = Json.toJson(new PriceList("pl", 1.1, 1.3, 1.2));
+                    logger.info("body: {}", json);
 
                     final FakeRequest fakeRequest = fakeRequest().withJsonBody(json);
                     final Result result = callAction(controllers.routes.ref.PriceListController.add(), fakeRequest);

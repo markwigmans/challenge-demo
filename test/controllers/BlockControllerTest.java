@@ -3,6 +3,7 @@ package controllers;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.fail;
 import static play.test.Helpers.callAction;
+import static play.test.Helpers.contentAsString;
 import static play.test.Helpers.fakeApplication;
 import static play.test.Helpers.fakeRequest;
 import static play.test.Helpers.running;
@@ -18,6 +19,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import play.Logger;
+import play.Logger.ALogger;
+import play.libs.Json;
 import play.mvc.Http.Status;
 import play.mvc.Result;
 import play.test.FakeRequest;
@@ -25,6 +29,7 @@ import services.BlockService;
 import services.PriceListService;
 import services.StadiumService;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
@@ -39,6 +44,8 @@ import configs.AppConfig;
 @ContextConfiguration(classes = { AppConfig.class })
 public class BlockControllerTest {
 
+    private final ALogger logger = Logger.of(getClass());
+
     @Autowired
     private StadiumService stadiumService;
     @Autowired
@@ -50,6 +57,34 @@ public class BlockControllerTest {
     public void before() {
         stadiumService.reset();
         priceListService.reset();
+    }
+
+    @Test
+    public void testAdd() {
+        running(fakeApplication(), new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    final String sid = "s1";
+                    final String bid = "b2";
+                    final String pid = "p3";
+
+                    stadiumService.add(new Stadium(sid, "test"));
+                    priceListService.add(new PriceList(pid, 1, 2, 3));
+
+                    final JsonNode json = Json.toJson(new Block(bid, bid, 10, 20, pid));
+                    final FakeRequest fakeRequest = fakeRequest().withJsonBody(json);
+                    logger.info("body: {}", json);
+                    final Result result = callAction(controllers.routes.ref.BlockController.add(sid), fakeRequest);
+
+                    assertThat(status(result)).isEqualTo(Status.OK);
+                    assertThat(blockService.available(sid, bid)).isEqualTo(200);
+                } catch (final Exception e) {
+                    e.printStackTrace();
+                    fail(e.toString());
+                }
+            }
+        });
     }
 
     @Test
@@ -73,8 +108,10 @@ public class BlockControllerTest {
                     json.put(BlockController.JSON_KEY_AVAILABLE, false);
 
                     final FakeRequest fakeRequest = fakeRequest().withJsonBody(json);
+                    logger.info("body: {}", json);
                     final Result result = callAction(controllers.routes.ref.BlockController.update(sid, bid, 3, 4), fakeRequest);
-
+                    logger.info("result: {}", contentAsString(result));
+                    
                     assertThat(status(result)).isEqualTo(Status.OK);
                     assertThat(blockService.available(sid, bid)).isEqualTo(199);
                 } catch (final Exception e) {
@@ -106,9 +143,11 @@ public class BlockControllerTest {
                     final ObjectMapper mapper = new ObjectMapper();
                     final ObjectNode json = mapper.createObjectNode();
                     json.put(BlockController.JSON_KEY_PRICELIST, pid2);
-
+                    logger.info("body: {}", json);
+                    
                     final FakeRequest fakeRequest = fakeRequest().withJsonBody(json);
                     final Result result = callAction(controllers.routes.ref.BlockController.update(sid, bid, 3, 4), fakeRequest);
+                    logger.info("result: {}", contentAsString(result));
 
                     assertThat(status(result)).isEqualTo(Status.OK);
                     assertThat(blockService.available(sid, bid)).isEqualTo(200);

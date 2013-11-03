@@ -36,13 +36,13 @@ public class BlockService {
     }
 
     public Seat update(final String sid, final String bid, final int rowNr, final int seatNr, final String priceList) {
-        final Seat seat = new Seat(rowNr, seatNr, priceList);
+        final Seat seat = new Seat(rowNr, seatNr, true, priceList);
         stadiumRepository.update(sid, bid, seat);
         return seat;
     }
 
     public Seat remove(final String sid, final String bid, final int rowNr, final int seatNr) {
-        final Seat seat = new Seat(rowNr, seatNr, null);
+        final Seat seat = new Seat(rowNr, seatNr, false, null);
         stadiumRepository.remove(sid, bid, seat);
         return seat;
     }
