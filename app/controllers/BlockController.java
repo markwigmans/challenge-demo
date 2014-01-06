@@ -25,7 +25,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 @org.springframework.stereotype.Controller
 public class BlockController {
 
-    @SuppressWarnings("unused")
     private final ALogger logger = Logger.of(getClass());
 
     static final String JSON_KEY_BLOCK = "block";
@@ -45,6 +44,7 @@ public class BlockController {
         final JsonNode body = request().body().asJson();
         final JsonNode path = body.findValue(JSON_KEY_BLOCK);
         final JsonNode blockNode = path != null ? path : body;
+        logger.debug("block: {}", blockNode);
         final Block block = Json.fromJson(blockNode, Block.class);
         service.add(sid, block);
         return ok(Json.toJson(block));
@@ -55,6 +55,7 @@ public class BlockController {
         final JsonNode json = request().body().asJson();
         final JsonNode pricelistNode = json.get(JSON_KEY_PRICELIST);
         final JsonNode availableNode = json.get(JSON_KEY_AVAILABLE);
+        logger.debug("update:{}/{}/{}/{} : priceList: {}, available: {}", sid, bid, rowNr, seatNr, pricelistNode, availableNode);
         final Seat seat;
         if (availableNode != null && availableNode.booleanValue() || pricelistNode != null && pricelistNode.isTextual()) {
             seat = service.update(sid, bid, rowNr, seatNr, pricelistNode.asText());
