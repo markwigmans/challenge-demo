@@ -19,7 +19,7 @@ class InitSimulation extends Simulation {
   private def blockID(a:Int, b:Int) : String = "b-" + a + "-" + b;
   
     
-  val initChain = exec(http("start empty").post("reset"))
+  val resetChain = exec(http("start empty").post("reset"))
   val stadiumChain = 
     repeat(Config.stadiums, "x") {
       exec(session => {
@@ -29,7 +29,7 @@ class InitSimulation extends Simulation {
           .setAttribute("stadiumId", stadiumID(stadium))
       })
       .exec(
-        http("create stadium ${stadium}")
+        http("create stadiums")
         .post("stadiums").body("""{"stadium" : {"id" : "${stadiumId}", "name" : "stadium ${stadium}"}}""").asJSON.check(status.is(200))
       )
     }
@@ -49,7 +49,7 @@ class InitSimulation extends Simulation {
           .setAttribute("kids", randInt(100,200))
       })
       .exec(
-        http("create pricelist ${id}")
+        http("create pricelists")
         .post("pricelists").body("""{"id" : "p-${id}", "name" : "pricelist ${id}","pricecategories":{"seniors":"${seniors}","adults":"${adults}","kids":"${kids}"}}""").asJSON
       )
     }
@@ -75,7 +75,7 @@ class InitSimulation extends Simulation {
       //  session
       // })      
       .exec(
-        http("create block for stadium: ${stadium}")
+        http("create blocks")
         .post("stadiums/s-${stadium}/block").body("""{"id":"${blockId}","name":"block ${stadium}/${block}","rows":"${rows}","seats":"${seats}","defaultPrice":"${price}"}""").asJSON
        )
     }
@@ -93,12 +93,26 @@ class InitSimulation extends Simulation {
           .setAttribute("blockId", blockId)
       }) 
       .exec(
-        http("update block for stadium: ${stadium}")
+        http("update blocks")
         .post("stadiums/s-${stadium}/block/${blockId}/row/2/seat/2").body("""{"available":false}""").asJSON
        )
     }
     
-  val initScn = scenario("Initialize").exec(initChain,stadiumChain,priceListChain,blockChain,availableChain)
+  val startChain = 
+    repeat(Config.stadiums, "x") {
+      exec(session => {
+        val stadium = session.getTypedAttribute[Int]("x") + 1
+        session
+          .setAttribute("stadium", stadium)
+          .setAttribute("stadiumId", stadiumID(stadium))
+      })
+      .exec(
+        http("start selling")
+        .post("start/${stadiumId}").check(status.is(200))
+      )
+    }    
+    
+  val initScn = scenario("Initialize").exec(resetChain,stadiumChain,priceListChain,blockChain,availableChain,startChain)
      
   setUp(
     initScn.users(1).protocolConfig(Config.httpConf)
