@@ -53,9 +53,12 @@ public class TicketController {
     @BodyParser.Of(BodyParser.Json.class)
     public Result buy(final String sid, final String bid) {
         final JsonNode body = request().body().asJson();
+               
         final JsonNode idNode = body.findValue(JSON_KEY_REQUEST_ID);
         final JsonNode requestNode = body.findValue(JSON_KEY_TICKET_REQUEST);
 
+        logger.debug("idNode: {}, requestNode: {}", idNode, requestNode);
+        
         final List<PriceCategory> request = Lists.newArrayList();
         for (final JsonNode categoryNode : requestNode) {
             request.add(PriceCategory.valueOf(categoryNode.asText()));

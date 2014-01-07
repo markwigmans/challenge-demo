@@ -14,11 +14,7 @@ import scala.util.Random
  * Initialize the Challenge
  */
 class InitSimulation extends Simulation {
-  
-  private def stadiumID(a:Int) : String = "s-" + a;  
-  private def blockID(a:Int, b:Int) : String = "b-" + a + "-" + b;
-  
-    
+      
   val resetChain = exec(http("start empty").post("reset"))
   val stadiumChain = 
     repeat(Config.stadiums, "x") {
@@ -26,17 +22,13 @@ class InitSimulation extends Simulation {
         val stadium = session.getTypedAttribute[Int]("x") + 1
         session
           .setAttribute("stadium", stadium)
-          .setAttribute("stadiumId", stadiumID(stadium))
+          .setAttribute("stadiumId", Utils.stadiumID(stadium))
       })
       .exec(
         http("create stadiums")
         .post("stadiums").body("""{"stadium" : {"id" : "${stadiumId}", "name" : "stadium ${stadium}"}}""").asJSON.check(status.is(200))
       )
     }
-
-  // set the seed so the result is reproducable  
-  private val RNG = new Random(1234)  
-  private def randInt(a:Int, b:Int) = RNG.nextInt(b-a) + a  
   
   val priceListChain = 
     repeat(Config.pricelists, "x") {
@@ -44,9 +36,9 @@ class InitSimulation extends Simulation {
         val id = session.getTypedAttribute[Int]("x") + 1
         session
           .setAttribute("id", id)
-          .setAttribute("seniors", randInt(100,200))
-          .setAttribute("adults", randInt(100,200))
-          .setAttribute("kids", randInt(100,200))
+          .setAttribute("seniors", Utils.randInt(100,200))
+          .setAttribute("adults", Utils.randInt(100,200))
+          .setAttribute("kids", Utils.randInt(100,200))
       })
       .exec(
         http("create pricelists")
@@ -59,7 +51,7 @@ class InitSimulation extends Simulation {
       exec(session => {
         val stadium = session.getTypedAttribute[Int]("x") / Config.blocks + 1
         val block = session.getTypedAttribute[Int]("x") % Config.blocks + 1
-        val blockId : String = blockID(stadium,block)
+        val blockId : String = Utils.blockID(stadium,block)
         val tuple = Config.rowSeats(Random.nextInt(Config.rowSeats.size))
         session
           .setAttribute("stadium", stadium)
@@ -68,12 +60,7 @@ class InitSimulation extends Simulation {
           .setAttribute("rows",  tuple._1)
           .setAttribute("seats", tuple._2)
           .setAttribute("price", tuple._3)
-      }) 
-      //.exec(session => {
-      //  // print the Session for debugging, don't do that on real Simulations
-      //  println(session)
-      //  session
-      // })      
+      })      
       .exec(
         http("create blocks")
         .post("stadiums/s-${stadium}/block").body("""{"id":"${blockId}","name":"block ${stadium}/${block}","rows":"${rows}","seats":"${seats}","defaultPrice":"${price}"}""").asJSON
@@ -86,7 +73,7 @@ class InitSimulation extends Simulation {
       exec(session => {
         val stadium : Int = session.getTypedAttribute[Int]("x") / Config.blocks + 1
         val block : Int = session.getTypedAttribute[Int]("x") % Config.blocks + 1
-        val blockId : String = blockID(stadium,block)
+        val blockId : String = Utils.blockID(stadium,block)
         session
           .setAttribute("stadium", stadium)
           .setAttribute("block", block)
@@ -104,7 +91,7 @@ class InitSimulation extends Simulation {
         val stadium = session.getTypedAttribute[Int]("x") + 1
         session
           .setAttribute("stadium", stadium)
-          .setAttribute("stadiumId", stadiumID(stadium))
+          .setAttribute("stadiumId", Utils.stadiumID(stadium))
       })
       .exec(
         http("start selling")
